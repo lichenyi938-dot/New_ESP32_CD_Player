@@ -1,3 +1,10 @@
+// --- Add for ESP-IDF v5.x FreeRTOS types ---
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"      // SemaphoreHandle_t
+#include "freertos/queue.h"       // QueueHandle_t（若后面会用）
+#include "freertos/task.h"        // TaskHandle_t（若后面会用）
+#include "freertos/event_groups.h"// EventGroupHandle_t（若后面会用）
+// -------------------------------------------
 #ifndef __USBHOST_DRIVER_H_
 #define __USBHOST_DRIVER_H_
 
