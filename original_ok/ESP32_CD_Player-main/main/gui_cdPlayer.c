@@ -1,3 +1,10 @@
+// ===== FIX: ensure LVGL uses the project's lv_conf.h =====
+#ifndef LV_CONF_INCLUDE_SIMPLE
+#define LV_CONF_INCLUDE_SIMPLE 1
+#endif
+#include "lv_conf.h"
+// =========================================================
+
 ﻿#include "lvgl.h"
 #include <stdio.h>
 #include <string.h>
