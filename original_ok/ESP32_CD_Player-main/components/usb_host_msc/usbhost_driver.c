@@ -299,10 +299,14 @@ void usbhost_driverInit()
     // 安装主机库
     // install usb host lib
     ESP_LOGI("usbhost_driverInit", "Installing USB Host Library");
-    usb_host_config_t host_config = {
-        .skip_phy_setup = false,
-        .intr_flags = ESP_INTR_FLAG_LEVEL1,
-    };
+#include "esp_intr_alloc.h"   // 若缺少 ESP_INTR_FLAG_LEVEL1 宏，请加这一句
+
+usb_host_config_t host_config = {
+    .skip_phy_setup = false,
+    .intr_flags     = ESP_INTR_FLAG_LEVEL1,
+};
+ESP_ERROR_CHECK(usb_host_install(&host_config));
+
     ESP_ERROR_CHECK(usb_host_install(&host_config));
 
     BaseType_t ret;
