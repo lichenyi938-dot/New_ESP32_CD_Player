@@ -302,7 +302,6 @@ void usbhost_driverInit()
     usb_host_config_t host_config = {
         .skip_phy_setup = false,
         .intr_flags = ESP_INTR_FLAG_LEVEL1,
-        .enum_filter_cb = NULL,
     };
     ESP_ERROR_CHECK(usb_host_install(&host_config));
 
