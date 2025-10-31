@@ -1,3 +1,6 @@
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#include "freertos/semphr.h"   // 如果 main.h 或其包含的头里用到了 SemaphoreHandle_t，也一并加上
 #ifndef __MAIN_H_
 #define __MAIN_H_
 
