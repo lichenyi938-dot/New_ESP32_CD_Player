@@ -401,20 +401,26 @@ void gui_setTrackTitle(const char *title, const char *performer)
     }
 }
 
-void gui_setEmphasis(bool en)
+void gui_setTrackNum(int current, int total)
 {
-    static bool oldEn = false;
-    if (oldEn == en) return;
-    oldEn = en;
+    static int oldCurrent = -1;
+    static int oldTotal = -1;
 
-    if (en) {
-        lv_style_set_bg_opa(&style_preEmphasis, LV_OPA_COVER);
-        lv_label_set_text(lb_preEmphasized, "EMPH");
-    } else {
-        lv_style_set_bg_opa(&style_preEmphasis, LV_OPA_TRANSP);
-        lv_label_set_text(lb_preEmphasized, "");
+    if (oldCurrent == current && oldTotal == total)
+        return;
+    oldCurrent = current;
+    oldTotal = total;
+
+    if (total == 0)
+    {
+        // 用 %s 避免空格式串告警
+        lv_label_set_text_fmt(lb_trackNumber, "%s", "");
     }
-    lv_obj_align_to(lb_preEmphasized, area_player, LV_ALIGN_TOP_RIGHT, -5, 5);
+    else
+    {
+        lv_label_set_text_fmt(lb_trackNumber, "%d / %d", current, total);
+    }
+    lv_obj_align_to(lb_trackNumber, area_bottomBar, LV_ALIGN_CENTER, 0, 0);
 }
 
 void gui_setTime(hmsf_t current, hmsf_t total)
