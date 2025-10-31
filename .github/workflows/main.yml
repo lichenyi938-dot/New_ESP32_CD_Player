@@ -11,33 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 🧱 检出仓库源码
+      # 🧱 检出源码
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ⚙️ 设置 ESP-IDF 环境
+      # ⚙️ 设置 ESP-IDF
       - name: Set up ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.1.1
 
-      # 🔧 进入 ESP32 工程目录并构建
+      # 🔧 构建固件
       - name: Build ESP32-S3 firmware
         run: |
           cd original_ok/ESP32_CD_Player-main
-          echo "📂 当前目录: $(pwd)"
+          echo "📂 当前路径: $(pwd)"
           echo "📄 文件列表:"
           ls -la
-          if [ ! -f "CMakeLists.txt" ]; then
-            echo "❌ 未找到 CMakeLists.txt，请检查路径"
-            exit 1
-          fi
           idf.py set-target esp32s3
           idf.py build
 
-      # 📦 上传编译产物（生成的 bin 文件）
+      # 📦 上传产物
       - name: Upload build results
         uses: actions/upload-artifact@v4
         with:
-          name: ESP32_S3_Firmware_Build
-          path: original_ok/ESP32_CD_Player-main/build/
+          name: ESP32_S3_Firmware
+          path: original_ok/ESP32_CD_Player-main/build
