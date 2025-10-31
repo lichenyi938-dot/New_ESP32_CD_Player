@@ -22,38 +22,27 @@
 
 #endif /* v8 compatibility */
 
-/* ===================== 符号兼容（示例：音量最大） ===================== */
+/* ===================== 符号兼容（例：音量最大） ===================== */
 #ifndef LV_SYMBOL_VOLUME_MAX
 #define LV_SYMBOL_VOLUME_MAX  LV_SYMBOL_VOLUME
 #endif
 
-/* ===================== 字体回退（避免链接阶段的未定义） =====================
- * 某些工程用的是 ESP-IDF 自带的 lvgl 组件，启用哪些字体由 Kconfig 决定。
- * 如果某个字号未启用，这里把它映射到 14 号（通常默认启用），保证链接不报错。
- * 说明：
- *   这些宏只做“同名字号之间”的别名替换，因此你代码里写的 &lv_font_montserrat_XX
- *   会被预处理替换成 &lv_font_montserrat_14 / 24 等，类型也完全匹配。
+/* ===================== 字体名回退（源码层面的替换） =====================
+ * 如果工程里没真正编进这些字号，下面把它们映射到已存在的字号，
+ * 以减少链接缺符号的概率（仍建议配合 ② 的“弱别名”，更稳）。
  */
 #if !(LV_FONT_MONTSERRAT_12+0)
 #define lv_font_montserrat_12 lv_font_montserrat_14
 #endif
-
 #if !(LV_FONT_MONTSERRAT_16+0)
 #define lv_font_montserrat_16 lv_font_montserrat_14
 #endif
-
 #if !(LV_FONT_MONTSERRAT_24+0)
 #define lv_font_montserrat_24 lv_font_montserrat_14
 #endif
-
 #if !(LV_FONT_MONTSERRAT_26+0)
 #define lv_font_montserrat_26 lv_font_montserrat_24
 #endif
-
 #if !(LV_FONT_MONTSERRAT_28+0)
 #define lv_font_montserrat_28 lv_font_montserrat_24
 #endif
-
-/* 重要：不要在这里把 lv_label_set_text 重定向到 lv_label_set_text_fmt。
- * 代码里需要格式化（带 %）的地方，保持用 lv_label_set_text_fmt；
- * 普通字符串（包括 "" 空串）继续用 lv_label_set_text，避免空格式串告警。*/
