@@ -1,11 +1,12 @@
-// ===== FIX: ensure LVGL uses the project's lv_conf.h =====
+// ==== 强制 LVGL 使用项目里的 lv_conf.h，并启用兼容层 ====
 #ifndef LV_CONF_INCLUDE_SIMPLE
 #define LV_CONF_INCLUDE_SIMPLE 1
 #endif
-#include "lv_conf.h"
-// =========================================================
+#include "lv_conf.h"        // 可保留；即使不写，LVGL 也会按 SIMPLE 规则找
+#include "lvgl.h"
+#include "lvgl_compat.h"    // ← 我们新加的兼容头，一定要有
+// ============================================================
 
-﻿#include "lvgl.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -367,7 +368,7 @@ void gui_player_init()
 
 void gui_setDriveModel(const char *str)
 {
-    char *oldStr = lv_label_get_text(lb_driveModel);
+    const char *oldStr = lv_label_get_text(lb_driveModel);
 
     if (strcmp(oldStr, str) == 0)
         return;
@@ -378,7 +379,7 @@ void gui_setDriveModel(const char *str)
 
 void gui_setDriveState(const char *str)
 {
-    char *oldStr = lv_label_get_text(lb_driveState);
+    const char *oldStr = lv_label_get_text(lb_driveState);
 
     if (strcmp(oldStr, str) == 0)
         return;
@@ -389,7 +390,7 @@ void gui_setDriveState(const char *str)
 
 void gui_setAlbumTitle(const char *str)
 {
-    char *oldStr = lv_label_get_text(lb_albumTitle);
+    const char *oldStr = lv_label_get_text(lb_albumTitle);
 
     if (strcmp(oldStr, str) == 0)
         return;
@@ -400,8 +401,8 @@ void gui_setAlbumTitle(const char *str)
 
 void gui_setTrackTitle(const char *title, const char *performer)
 {
-    char *oldTitle = lv_label_get_text(lb_trackTitle);
-    char *oldPerformer = lv_label_get_text(lb_trackPerformer);
+    const char *oldTitle = lv_label_get_text(lb_trackTitle);
+    const char *oldPerformer = lv_label_get_text(lb_trackPerformer);
 
     if ((title != NULL) && (strcmp(oldTitle, title) != 0))
     {
@@ -495,7 +496,7 @@ void gui_setProgress(uint32_t current, uint32_t total)
 
 void gui_setPlayState(const char *str)
 {
-    char *oldStr = lv_label_get_text(lb_playState);
+    const char *oldstr = lv_label_get_text(lb_playState);
     if (strcmp(oldStr, str) == 0)
         return;
 
