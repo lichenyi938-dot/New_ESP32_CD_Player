@@ -11,24 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ 检出仓库源码
+      # 🧱 检出仓库源码
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ 设置 ESP-IDF 环境
+      # ⚙️ 设置 ESP-IDF 环境
       - name: Set up ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: latest
 
-      # 3️⃣ 进入项目路径并构建固件
+      # 🔧 构建固件（含路径调试）
       - name: Build firmware
         run: |
           cd original_ok/ESP32_CD_Player-main
+          echo "📂 Current directory:"
+          pwd
+          echo "📄 List files:"
+          ls -la
           idf.py set-target esp32s3
           idf.py build
 
-      # 4️⃣ 上传编译结果（bin文件、elf文件等）
+      # 📦 上传编译产物（bin文件夹）
       - name: Upload build results
         uses: actions/upload-artifact@v4
         with:
