@@ -768,3 +768,5 @@
 #endif /*LV_CONF_H*/
 
 #endif /*End of "Content enable"*/
+# 告诉 LVGL：用我们项目里的 lv_conf.h
+
