@@ -231,8 +231,8 @@ void gui_player_init()
     lv_obj_set_style_text_font(lb_duration, &lv_font_montserrat_12, LV_PART_MAIN);
     lv_obj_set_style_text_align(lb_duration, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
 
-    hmsf_t a = {0, 1, 2, 3};
-    hmsf_t b = {4, 5, 6, 7};
+    hmsf_t a = (hmsf_t){0, 1, 2, 3};
+    hmsf_t b = (hmsf_t){4, 5, 6, 7};
     gui_setTime(a, b);
 
     /***********************
@@ -250,8 +250,6 @@ void gui_player_init()
      * play state
      */
     lb_playState = lv_label_create(area_bottomBar);
-    // lv_obj_set_style_text_color(lb_playState, lv_color_make(0xf1, 0xc4, 0x0f), LV_PART_MAIN);
-    // lv_obj_set_style_text_font(lb_playState, &lv_font_montserrat_12, LV_PART_MAIN);
     lv_obj_add_style(lb_playState, &style1, 0);
 
     gui_setPlayState(LV_SYMBOL_STOP);
@@ -261,8 +259,6 @@ void gui_player_init()
      * volume
      */
     lb_volume = lv_label_create(area_bottomBar);
-    // lv_obj_set_style_text_color(lb_volume, lv_color_make(0xf1, 0xc4, 0x0f), LV_PART_MAIN);
-    // lv_obj_set_style_text_font(lb_volume, &lv_font_montserrat_12, LV_PART_MAIN);
     lv_obj_add_style(lb_volume, &style1, 0);
 
     gui_setVolume(99);
@@ -369,9 +365,7 @@ void gui_player_init()
 void gui_setDriveModel(const char *str)
 {
     const char *oldStr = lv_label_get_text(lb_driveModel);
-
-    if (strcmp(oldStr, str) == 0)
-        return;
+    if (strcmp(oldStr, str) == 0) return;
 
     lv_label_set_text(lb_driveModel, str);
     lv_obj_align_to(lb_driveModel, area_topBar, LV_ALIGN_LEFT_MID, 5, 0);
@@ -380,9 +374,7 @@ void gui_setDriveModel(const char *str)
 void gui_setDriveState(const char *str)
 {
     const char *oldStr = lv_label_get_text(lb_driveState);
-
-    if (strcmp(oldStr, str) == 0)
-        return;
+    if (strcmp(oldStr, str) == 0) return;
 
     lv_label_set_text(lb_driveState, str);
     lv_obj_align_to(lb_driveState, area_topBar, LV_ALIGN_RIGHT_MID, -5, 0);
@@ -391,9 +383,7 @@ void gui_setDriveState(const char *str)
 void gui_setAlbumTitle(const char *str)
 {
     const char *oldStr = lv_label_get_text(lb_albumTitle);
-
-    if (strcmp(oldStr, str) == 0)
-        return;
+    if (strcmp(oldStr, str) == 0) return;
 
     lv_label_set_text(lb_albumTitle, str);
     lv_obj_align_to(lb_albumTitle, area_player, LV_ALIGN_TOP_LEFT, 5, 5);
@@ -401,7 +391,7 @@ void gui_setAlbumTitle(const char *str)
 
 void gui_setTrackTitle(const char *title, const char *performer)
 {
-    const char *oldTitle = lv_label_get_text(lb_trackTitle);
+    const char *oldTitle     = lv_label_get_text(lb_trackTitle);
     const char *oldPerformer = lv_label_get_text(lb_trackPerformer);
 
     if ((title != NULL) && (strcmp(oldTitle, title) != 0))
@@ -409,7 +399,7 @@ void gui_setTrackTitle(const char *title, const char *performer)
         lv_label_set_text(lb_trackTitle, title);
 
         bool noPerformer = true;
-        for (int i = 0; i < strlen(performer); i++)
+        for (int i = 0; i < (int)strlen(performer); i++)
         {
             if (performer[i] != ' ')
             {
@@ -440,8 +430,7 @@ void gui_setTrackTitle(const char *title, const char *performer)
 void gui_setEmphasis(bool en)
 {
     static bool oldEn = false;
-    if (oldEn == en)
-        return;
+    if (oldEn == en) return;
     oldEn = en;
 
     if (en)
@@ -452,7 +441,8 @@ void gui_setEmphasis(bool en)
     else
     {
         lv_style_set_bg_opa(&style_preEmphasis, LV_OPA_TRANSP);
-        lv_label_set_text(lb_preEmphasized, "");
+        // 避免零长度格式串告警
+        lv_label_set_text_fmt(lb_preEmphasized, "%s", "");
     }
     lv_obj_align_to(lb_preEmphasized, area_player, LV_ALIGN_TOP_RIGHT, -5, 5);
 }
@@ -460,7 +450,7 @@ void gui_setEmphasis(bool en)
 void gui_setTime(hmsf_t current, hmsf_t total)
 {
     static hmsf_t oldCurrent = {255, 255, 255, 255};
-    static hmsf_t oldTotal = {255, 255, 255, 255};
+    static hmsf_t oldTotal   = {255, 255, 255, 255};
 
     if (memcmp(&oldCurrent, &current, sizeof(hmsf_t)) != 0)
     {
@@ -480,12 +470,11 @@ void gui_setTime(hmsf_t current, hmsf_t total)
 void gui_setProgress(uint32_t current, uint32_t total)
 {
     static uint32_t oldCurrent = 0;
-    static uint32_t oldToal = 0;
+    static uint32_t oldToal    = 0;
 
-    if (oldCurrent == current && oldToal == total)
-        return;
+    if (oldCurrent == current && oldToal == total) return;
     oldCurrent = current;
-    oldToal = total;
+    oldToal    = total;
 
     if (total == 0) // prevent IntegerDivideByZero exception
         total = 1234;
@@ -496,9 +485,8 @@ void gui_setProgress(uint32_t current, uint32_t total)
 
 void gui_setPlayState(const char *str)
 {
-    const char *oldstr = lv_label_get_text(lb_playState);
-    if (strcmp(oldStr, str) == 0)
-        return;
+    const char *oldStr = lv_label_get_text(lb_playState);  // 修正变量名 & const
+    if (strcmp(oldStr, str) == 0) return;
 
     lv_label_set_text(lb_playState, str);
     lv_obj_align_to(lb_playState, area_bottomBar, LV_ALIGN_LEFT_MID, 7, 0);
@@ -507,8 +495,7 @@ void gui_setPlayState(const char *str)
 void gui_setVolume(int vol)
 {
     static int oldVol = -1;
-    if (oldVol == vol)
-        return;
+    if (oldVol == vol) return;
 
     oldVol = vol;
     lv_label_set_text_fmt(lb_volume, LV_SYMBOL_VOLUME_MAX " %02d", vol);
@@ -518,16 +505,16 @@ void gui_setVolume(int vol)
 void gui_setTrackNum(int current, int total)
 {
     static int oldCurrent = -1;
-    static int oldTotal = -1;
+    static int oldTotal   = -1;
 
-    if (oldCurrent == current && oldTotal == total)
-        return;
+    if (oldCurrent == current && oldTotal == total) return;
     oldCurrent = current;
-    oldTotal = total;
+    oldTotal   = total;
 
     if (total == 0)
     {
-        lv_label_set_text(lb_trackNumber, "");
+        // 避免零长度格式串告警
+        lv_label_set_text_fmt(lb_trackNumber, "%s", "");
     }
     else
     {
