@@ -1,41 +1,38 @@
 #pragma once
 #include "lvgl.h"
 
-/* ---------------- LVGL v9 对齐枚举在 v8 的兼容映射 ---------------- */
+/* ---------- Align compatibility (v8 names that don't exist in v9) ---------- */
 #ifndef LV_ALIGN_LEFT_MID
-  #define LV_ALIGN_LEFT_MID   LV_ALIGN_LEFT
+#define LV_ALIGN_LEFT_MID    LV_ALIGN_LEFT
 #endif
 #ifndef LV_ALIGN_RIGHT_MID
-  #define LV_ALIGN_RIGHT_MID  LV_ALIGN_RIGHT
+#define LV_ALIGN_RIGHT_MID   LV_ALIGN_RIGHT
 #endif
 #ifndef LV_ALIGN_TOP_MID
-  #define LV_ALIGN_TOP_MID    LV_ALIGN_TOP
+#define LV_ALIGN_TOP_MID     LV_ALIGN_TOP
 #endif
 #ifndef LV_ALIGN_BOTTOM_MID
-  #define LV_ALIGN_BOTTOM_MID LV_ALIGN_BOTTOM
+#define LV_ALIGN_BOTTOM_MID  LV_ALIGN_BOTTOM
 #endif
 #ifndef LV_ALIGN_CENTER
-  #define LV_ALIGN_CENTER     LV_ALIGN_CENTER   /* v8 已存在；为了防护，保留 */
+/* v8 里也叫 CENTER，这里只是兜底 */
+#define LV_ALIGN_CENTER      LV_ALIGN_CENTER
 #endif
-#ifndef LV_ALIGN_OFF
-  #define LV_ALIGN_OFF        LV_ALIGN_DEFAULT
+#ifndef LV_ALIGN_DEFAULT
+#define LV_ALIGN_DEFAULT     LV_ALIGN_CENTER
 #endif
 
-/* ---------------- LVGL 符号名兼容（v9→v8 或兜底） ---------------- */
+/* ---------- Symbols compatibility ---------- */
 #ifndef LV_SYMBOL_VOLUME_MAX
-  #ifdef LV_SYMBOL_VOLUME
-    #define LV_SYMBOL_VOLUME_MAX LV_SYMBOL_VOLUME
-  #else
-    /* 兜底字形（FontAwesome 的喇叭图标）；若字体不含该码位会显示方块 */
-    #define LV_SYMBOL_VOLUME_MAX "\xEF\x80\xAA"
-  #endif
+#define LV_SYMBOL_VOLUME_MAX LV_SYMBOL_VOLUME
 #endif
 
-/* ---------------- 统一把 lv_label_set_text(...) 映射为 *_fmt ----------------
-   你的工程里很多是 lv_label_set_text(obj, "xxx %d", val) 这种“带格式”的写法。
-   v8 需要用 lv_label_set_text_fmt 才能传可变参数，这里做一个宏重定向。
-*/
+/* ---------- Redirect old lv_label_set_text(...) to fmt variant ---------- */
+/* 这条只做“把 text 当作格式串”的重定向；配合步骤A避免传入 "" */
 #ifndef LVGL_COMPAT_REMAP_LABEL_TEXT
-  #define LVGL_COMPAT_REMAP_LABEL_TEXT 1
-  #define lv_label_set_text(_obj_, ...) lv_label_set_text_fmt((_obj_), __VA_ARGS__)
+#define LVGL_COMPAT_REMAP_LABEL_TEXT 1
+#endif
+#if LVGL_COMPAT_REMAP_LABEL_TEXT
+#undef  lv_label_set_text
+#define lv_label_set_text(_obj, ...) lv_label_set_text_fmt((_obj), __VA_ARGS__)
 #endif
