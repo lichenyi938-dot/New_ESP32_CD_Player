@@ -21,10 +21,10 @@ jobs:
         with:
           esp_idf_version: v5.1.1
 
-      # 🔧 进入正确的 ESP32 工程路径
+      # 🔧 构建固件（指定正确的工程路径）
       - name: Build ESP32-S3 firmware
+        working-directory: original_ok/ESP32_CD_Player-main
         run: |
-          cd original_ok/ESP32_CD_Player-main
           echo "📂 当前路径: $(pwd)"
           echo "📄 文件列表:"
           ls -la
