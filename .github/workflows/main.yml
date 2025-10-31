@@ -21,16 +21,15 @@ jobs:
         with:
           esp_idf_version: v5.1.1
 
-      # 🔧 构建固件（强制进入正确目录）
+      # 🔧 构建固件（用 working-directory 明确路径）
       - name: Build ESP32-S3 firmware
+        working-directory: original_ok/ESP32_CD_Player-main
         run: |
-          cd $GITHUB_WORKSPACE/original_ok/ESP32_CD_Player-main
           echo "📂 当前目录：$(pwd)"
           echo "📄 文件列表："
           ls -la
           idf.py set-target esp32s3
           idf.py build
-        shell: bash
 
       # 📦 上传编译结果（bin 文件）
       - name: Upload build results
